@@ -16,9 +16,15 @@ enableEmoji = true
   defaultTheme = "auto"
   dateFormat = "2006-01-02"
 
+  [params.home.profile]
+    enable = true
+    gravatarEmail = "tomas@tomasfarias.dev"
+    social = true
+
   [params.social]
     GitHub = "tomasfarias"
     Linkedin = "tomasfarias"
+    Stackoverflow = "3994693/tomas-farias"
 
   [params.search]
     enable = true
@@ -77,14 +83,6 @@ enableEmoji = true
     url = "/about/"
     title = ""
     weight = 3
-  [[menu.main]]
-    identifier = "github"
-    pre = "<i class='fab fa-github fa-fw'></i>"
-    post = ""
-    name = ""
-    url = "https://github.com/tomasfarias"
-    title = "GitHub"
-    weight = 4
 
 [markup]
   [markup.highlight]
@@ -93,4 +91,4 @@ enableEmoji = true
 [author]
   name = "Tomás Farías Santana"
   email = "tomas@tomasfarias.dev"
-  link = "tomasfarias.dev"
+  link = "https://tomasfarias.dev"
