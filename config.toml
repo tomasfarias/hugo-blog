@@ -45,9 +45,9 @@ enableEmoji = true
 
       [params.page.comment.utterances]
         enable = true
-        repo = "https://github.com/tomasfarias/hugo-blog"
+        repo = "tomasfarias/hugo-blog"
         issueTerm = "pathname"
-        label = ""
+        label = "comment"
         lightTheme = "github-light"
         darkTheme = "github-dark"
 
