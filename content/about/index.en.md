@@ -1,7 +1,11 @@
-+++
-title = "about"
-path = "about"
-+++
+---
+title: "about"
+path: "about"
+comment:
+  enable: false
+  utterances:
+    enable: false
+---
 
 I'm Tomás, a Software Engineer that is looking to document some of my thoughts and, hopefully, help other people in the process. Knowing why I believe a blog should exist may give you an idea of the type of content you may find here; with that being said, I believe a blog exists to:
 * Fill gaps in official documentation by providing practical examples.
