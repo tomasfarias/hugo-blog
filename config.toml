@@ -1,0 +1,96 @@
+baseURL = "http://tomasfarias.dev"
+
+defaultContentLanguage = "en"
+languageCode = "en"
+
+title = "tomasfarias.dev"
+
+theme = "LoveIt"
+
+enableRobotsTXT = true
+enableEmoji = true
+
+[params]
+  version = "0.2.X"
+  keywords = ["Blog", "Programming", "Software", "Engineering"]
+  defaultTheme = "auto"
+  dateFormat = "2006-01-02"
+
+  [params.social]
+    GitHub = "tomasfarias"
+    Linkedin = "tomasfarias"
+
+  [params.search]
+    enable = true
+    type = "algolia"
+    contentLength = 4000
+    placeholder = ""
+    maxResultLength = 10
+    snippetLength = 30
+    highlightTag = "em"
+    absoluteURL = false
+
+  [params.page]
+    [params.page.toc]
+      auto = false
+
+    [params.page.comment]
+      enable = true
+
+      [params.page.comment.utterances]
+        enable = true
+        repo = "https://github.com/tomasfarias/hugo-blog"
+        issueTerm = "pathname"
+        label = ""
+        lightTheme = "github-light"
+        darkTheme = "github-dark"
+
+    [params.page.share]
+      enable = true
+      Twitter = true
+      Facebook = true
+      Linkedin = true
+      HackerNews = true
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    pre = ""
+    post = ""
+    name = "Posts"
+    url = "/posts/"
+    title = ""
+    weight = 1
+  [[menu.main]]
+    identifier = "tags"
+    pre = ""
+    post = ""
+    name = "Tags"
+    url = "/tags/"
+    title = ""
+    weight = 2
+  [[menu.main]]
+    identifier = "about"
+    pre = ""
+    post = ""
+    name = "About"
+    url = "/about/"
+    title = ""
+    weight = 3
+  [[menu.main]]
+    identifier = "github"
+    pre = "<i class='fab fa-github fa-fw'></i>"
+    post = ""
+    name = ""
+    url = "https://github.com/tomasfarias"
+    title = "GitHub"
+    weight = 4
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+
+[author]
+  name = "Tomás Farías Santana"
+  email = "tomas@tomasfarias.dev"
+  link = "tomasfarias.dev"
