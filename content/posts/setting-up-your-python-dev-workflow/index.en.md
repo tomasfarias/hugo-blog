@@ -16,7 +16,7 @@ Hence, the idea behind this post is to serve as a review of the existing develop
 
 As already mentioned in the introduction, package management in Python has gone a long way. That doesn't mean the good old `pip` + `venv` combo is going anywhere: it's still my choice of packaging for any small and quick projects or script collections due to how quick it is to setup a `venv`, `pip install` everything you need, and `pip freeze` your environment into a `requirements.txt` file:
 
-```sh
+```shell
 python -m venv venv
 source venv/bin/activate
 pip install package1 package2
@@ -34,7 +34,7 @@ Going over all the nuances of `Poetry` would take a long time, so instead I'll s
 
 Starting a project from scratch is as simple as:
 
-```sh
+```shell
 poetry new my-new-project
 ```
 
@@ -42,26 +42,26 @@ This will create a new `my-new-project` directory, and populate it with a basic 
 
 If we are starting `my-new-project` from an existing project:
 
-```sh
+```shell
 cd path/to/my-new-project
 poetry init
 ```
 
 We can add dependencies to `pyproject.toml` under the `[tool.poetry.dependencies]` section, or just using the following command:
 
-```sh
+```shell
 poetry add "requests=2.26.0" beautifulsoup4@latest "pandas>=1.3"
 ```
 
 As illustrated, dependency version constraints can also be specified when adding. In similar fashion, development dependencies can be added with the `--dev` flag:
 
-```sh
+```shell
 poetry add --dev pytest black isort
 ```
 
 Once added, we can install our dependencies. Development dependencies will be installed by default unless we use the `--no-dev` flag:
 
-```sh
+```shell
 poetry install
 poetry install --no-dev
 ```
@@ -70,7 +70,7 @@ After running this command a `poetry.lock` file will be created in the root dire
 
 To run a script in a project or a tool, like one of our development dependencies, use `run`, e.g.:
 
-```sh
+```shell
 potery run black my_script.py
 poetry run pytest tests/test_my_script.py
 poetry run python my_script.py
@@ -78,7 +78,7 @@ poetry run python my_script.py
 
 Finally, whenever we need to update a dependency, we can run:
 
-```sh
+```shell
 poetry update requests
 ```
 
@@ -93,7 +93,7 @@ Styling discussions are a waste of time, but adhering to a common style is not w
 
 These three tools can each be manually run to style a file or multiple:
 
-```sh
+```shell
 black /path/to/file.py
 flake8 /path/to/file.py
 isort /path/to/file.py
@@ -213,7 +213,7 @@ Now on every commit we will run `mypy` on changed files, and assert our type con
 
 `mypy` runs out of the box without any special configuration, but you may run into one of several common ["missing imports"](https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports) error, with messages like:
 
-```sh
+```shell
 main.py:1: error: Library stubs not installed for "requests" (or incompatible with Python 3.8)
 main.py:2: error: Skipping analyzing 'django': found module but no type hints or library stubs
 main.py:3: error: Cannot find implementation or library stub for module named "this_module_does_not_exist"
@@ -221,7 +221,7 @@ main.py:3: error: Cannot find implementation or library stub for module named "t
 
 In particular, the second message is the one I have seen the most in my experience. It's telling us that a library we are trying to import does not come with any type hints, which means `mypy` will not attempt to infer its types. The first thing you should do is check whether an upgrade is in order: later versions of a library may have included type hints for `mypy`. If that's not the case, or upgrading is not possible for some other reason, you may consider writing the type hints yourself, but the simplest solution is to ignore the error configuring your `mypy.ini`, for example:
 
-```sh
+```shell
 [mypy-django.*]
 ignore_missing_imports = True
 ```

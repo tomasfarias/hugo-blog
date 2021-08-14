@@ -29,7 +29,7 @@ We may interested in doing a quick diagnosis of our latest `dbt` command to answ
 
 We can do that with the following `jq` command:
 
-```sh
+```shell
 cat target/run_results.json | jq -r '[.results[].status] | group_by(.) | map({"status": unique, "total": length})'
 ```
 
@@ -59,7 +59,7 @@ Which would leave us with an output like:
 
 To take a look at the actual error messages to do some debugging, we may run:
 
-```sh
+```shell
 cat target/run_results.json | jq -r '.results | map(select(.status == "error")) | map({"model": .unique_id, "error_message": .message})'
 ```
 
@@ -67,7 +67,7 @@ cat target/run_results.json | jq -r '.results | map(select(.status == "error")) 
 
 Timing information is probably the first thing we look at when trying to diagnose performance issues. We can use the following command-line script to find the most expensive models:
 
-```sh
+```shell
 cat target/run_results.json | jq -r '[{model: .results[].unique_id, execution_time: .results[].execution_time?}] | sort_by(.execution_time) | .[-1]'
 ```
 
