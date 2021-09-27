@@ -101,35 +101,48 @@ CREATE TABLE dbt_run_results (
 );
 ```
 
-And we can load our `run_results.json` with:
+Unfortunately, Redshift cannot handle nested JSON structures like the one in `run_results.json`, so we have to do some preprocessing[^1]. Essentially, we need to flatten the results so that we have a JSON array of results from a dbt run. Said preprocessing may be done in Python, like so:
+
+```python
+def run_results_to_json_array(json_str: str) -> str:
+    """Turns a dbt run results JSON string into a JSON array."""
+    import json
+
+    json_dict = json.loads(json_str)
+    json_arr_str = ""
+
+    for result in json_dict["results"]:
+        new_result = {
+            "status": result["status"],
+            "unique_id": result["unique_id"],
+            "exec_time": result["execution_time"],
+            # message key is not required, so it may be missing
+            "message": result.get("message"),
+        }
+
+        for timing in result["timing"]:
+            key_prefix = timing["name"]
+            new_result[f"{key_prefix}_start_ts"] = timing.get("started_at")
+            new_result[f"{key_prefix}_end_ts"] = timing.get("completed_at")
+
+        json_arr_str += json.dumps(new_result)
+
+    return json_arr_str
+```
+
+After we have uploaded our new `run_results_processed.json` file, we can load it with:
 
 ```sql
-COPY dbt_run_results FROM 's3://mybucket/run_results.json'
+COPY dbt_run_results FROM 's3://mybucket/run_results_processed.json'
 IAM_ROLE 'arn:aws:iam::0123456789012:role/MyRedshiftRole'
-FORMAT AS JSON 's3://mybucket/jsonpaths_file';
+FORMAT AS JSON;
 ```
-
-Using the following `jsonpaths` uploaded to, in this example, `s3://mybucket/jsonpaths_file`:
-
-```json
-{
-    "jsonpaths": [
-       "$.results.[*].status",
-       "$.results.[*].unique_id",
-       "$.results.[*].timing.[?(@.name=='compile')].started_at",
-       "$.results.[*].timing.[?(@.name=='compile')].completed_at",
-       "$.results.[*].timing.[?(@.name=='execute')].started_at",
-       "$.results.[*].timing.[?(@.name=='execute')].completed_at",
-       "$.results.[*].execution_time",
-       "$.results.[*].message",
-   ]
-}
-```
-
-And that's it! We will now have a good amount of the information available in `run_results.json` loaded into our data-warehouse.
 
 ## In conclusion and what comes next
 
 I set out to write this more practical post as I did some exploring of `run_results.json` myself, and I hope that folks working with `dbt` and looking to do some quick run analysis can also find some use to it. Ideally, this post becomes the one you Google all the time when you need to remember a `jq` command to work with `run_results.json`!
 
 Finally, I would like this post to be part of a "mini-series" of posts that work with `dbt` artifacts: `run_results.json` is just the first I decided to take a look at. Coming up, I do plan to dig into `manifest.json` as there is some valuable information to extract from there.
+
+
+[^1]: A previous version of this post suggested the usage of a JSONPath file. Since then I've learned that Redshift does not support any of the more advanced JSONPath features, like wildcards, making iterating over a nested structure impossible.
