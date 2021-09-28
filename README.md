@@ -17,7 +17,7 @@ hugo server --disableFastRender
 Running with the included Dockerfile is also an option:
 
 ``` sh
-docker build tomasfarias/hugo-blog:latest .
+docker build -t tomasfarias/hugo-blog:latest .
 docker run --net=host -d tomasfarias/hugo-blog:latest
 ```
 
