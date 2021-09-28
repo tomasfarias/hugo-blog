@@ -1,7 +1,6 @@
 ---
 title: "Sphinx Documentation on GitHub Pages using Poetry"
 date: 2021-09-27
-draft: true
 author: "Tomás Farías Santana"
 authorLink: "https://tomasfarias.dev"
 tags: ["python", "workflow", "poetry", "sphinx"]
