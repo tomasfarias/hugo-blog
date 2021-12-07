@@ -161,8 +161,8 @@ dbt test --schema
 Has become:
 
 ```sh {linenos=table}
-dbt test --singular
-dbt test --generic
+dbt test --select test_type:singular
+dbt test --select test_type:generic
 ```
 
 The `test_type` selection method still accepts `data` and `schema` for backwards compatibility:
@@ -171,11 +171,7 @@ The `test_type` selection method still accepts `data` and `schema` for backwards
 dbt test --select test_type:data test_type:schema
 ```
 
-But I would still recommend migrating these invocations too as backwards compatibility may be dropped in the future:
-
-```sh {linenos=table}
-dbt test --select test_type:singular test_type:generic
-```
+But I would still recommend migrating these invocations too as backwards compatibility may be dropped in the future.
 
 #### In Airflow with airflow-dbt-python
 
