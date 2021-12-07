@@ -116,7 +116,7 @@ seeds:
 
 Your v1.0.0 `dbt_project.yml` now needs attention in the following lines:
 
-```yaml {linenos=table,hl_lines=["5-8",13,16,24]}
+```yaml {linenos=table,hl_lines=["7-10",15,18,26]}
 name: 'my_new_project'
 version: '1.0.0'
 config-version: 2
