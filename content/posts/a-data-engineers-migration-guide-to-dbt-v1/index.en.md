@@ -16,7 +16,7 @@ Right from the get go, the way we install `dbt` is no longer `pip install dbt`, 
 
 Before v1.0.0, installing dbt would also install all database adapters (Postgres, Snowflake, Redshift, and BigQuery). But now,  after installing `dbt-core`, you have to install any adapters that you need by running `pip install dbt-<adapter>`.
 
-This has probably brought you issues if you are running Amazon's MWAA, as the Snowflake adapter has a Rust dependency that not all platforms may support[^1]. This was particularly annoying since the Snowflake adapter was installed even if you were not using Snowflake! As someone who ran into these issues a lot, I'm **very happy** to see this change, although I would have preffered the inclusion of the adapters as extras of the main `dbt-core` package to simplify the installation even more.
+This has probably brought you issues if you are running Amazon's MWAA, as the Snowflake adapter has a Rust dependency that not all platforms may support[^1]. This was particularly annoying since the Snowflake adapter was installed even if you were not using Snowflake! As someone who ran into these issues a lot, I'm **very happy** to see this change, although I would have preferred the inclusion of the adapters as extras of the main `dbt-core` package to simplify the installation even more.
 
 On a minor note, support for Python 3.6 has been dropped by `dbt` v1.0.0, as we are approaching EOL.
 
