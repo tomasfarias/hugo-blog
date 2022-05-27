@@ -1,4 +1,4 @@
-FROM caddy:2.4.3-alpine
+FROM caddy:2.4.6-alpine
 
 MAINTAINER Tomás Farías Santana <tomas@tomasfarias.dev>
 
