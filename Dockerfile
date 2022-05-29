@@ -1,8 +1,8 @@
-FROM caddy:2.5.1-alpine
+FROM alpine:3.12 AS builder
 
 MAINTAINER Tomás Farías Santana <tomas@tomasfarias.dev>
 
-ENV HUGO_VERSION=0.87.0
+ENV HUGO_VERSION=0.99.1
 
 RUN apk --no-cache add \
     git \
@@ -17,7 +17,12 @@ RUN apk --no-cache add \
 WORKDIR /blog
 
 COPY . .
+
 RUN git submodule update --init
 RUN hugo
+
+FROM caddy:2.5.1-alpine
+
+COPY --from=builder /blog/public ./public
 
 CMD ["caddy", "file-server", "--root", "public", "--listen", "localhost:8080"]
