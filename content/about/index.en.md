@@ -1,5 +1,5 @@
 ---
-title: "about"
+title: "Learn more about me"
 path: "about"
 comment:
   enable: false

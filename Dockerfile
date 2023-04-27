@@ -2,7 +2,7 @@ FROM alpine:3.12 AS builder
 
 MAINTAINER Tomás Farías Santana <tomas@tomasfarias.dev>
 
-ENV HUGO_VERSION=0.99.1
+ENV HUGO_VERSION=0.111.3
 
 RUN apk --no-cache add \
     git \
@@ -21,7 +21,7 @@ COPY . .
 RUN git submodule update --init
 RUN hugo
 
-FROM caddy:2.5.1-alpine
+FROM caddy:2.6.4-alpine
 
 COPY --from=builder /blog/public ./public
 

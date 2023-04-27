@@ -28,7 +28,7 @@ The blog should be available at `localhost:8080` by default.
 The code of this project are licensed under the ![MIT license](LICENSE). The content of the blog posts is covered under the [CC BY-NC 4.0 LICENSE](https://creativecommons.org/licenses/by-nc/4.0/).
 This blog relies on the following MIT-compatible licensed projects:
 * The aforementioned [hugo](https://github.com/gohugoio/hugo). See [LICENSE](https://raw.githubusercontent.com/gohugoio/hugo/master/LICENSE).
-* The [LoveIt](https://github.com/dillonzq/LoveIt) theme. See [LICENSE](https://raw.githubusercontent.com/dillonzq/LoveIt/master/LICENSE).
+* The [m10c](https://github.com/vaga/hugo-theme-m10c) theme. See [LICENSE](https://raw.githubusercontent.com/vaga/hugo-theme-m10c/master/LICENSE.md).
 * The [Nord](https://github.com/arcticicestudio/nord) color palette. See [LICENSE](https://raw.githubusercontent.com/arcticicestudio/nord/develop/LICENSE).
 * The [Gruvbox](https://github.com/morhetz/gruvbox) color palette.
 
