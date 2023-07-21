@@ -1,0 +1,11 @@
+#+TITLE: Home
+#+PATH: /
+#+MENU: main
+#+DATE: 2023-02-27
+#+AUTHOR: Tomás Farías Santana
+#+WEIGHT: 1
+#+DESCRIPTION: An introduction about myself in the homepage. For more, see /about/.
+
+** Welcome, I'm *Tomás*!
+
+Visit my [[/articles][blog]] or take a look at some of my work in [[https://github.com/tomasfarias][GitHub]]. Most of my work is in Python, sometimes Rust.

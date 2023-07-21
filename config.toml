@@ -5,12 +5,12 @@ languageCode = "en"
 
 title = "tomasfarias.dev"
 
-theme = "m10c"
+theme = "hugo-bearcub"
 
 enableRobotsTXT = true
 enableEmoji = true
 
-copyright = "2023 Tomás Farías All rights reserved"
+copyright = "Copyright © 2023, Tomás Farías."
 
 [author]
   name = "Tomás Farías"
@@ -19,31 +19,8 @@ copyright = "2023 Tomás Farías All rights reserved"
 
 [markup]
   [markup.highlight]
-    style = "dracula"
-    lineNos = true
-
-[menu]
-  [[menu.main]]
-    identifier = "home"
-    name = "Home"
-    url = "/"
-    weight = 1
-  [[menu.main]]
-    identifier = "about"
-    pre = ""
-    post = ""
-    name = "About"
-    url = "/about/"
-    title = "More about me"
-    weight = 2
-  [[menu.main]]
-    identifier = "posts"
-    pre = ""
-    post = ""
-    name = "Posts"
-    url = "/posts/"
-    title = "All posts"
-    weight = 3
+    style = "solarized-dark"
+    lineNumbersInTable = false
 
 [params]
   author = "Tomás Farías Santana"
@@ -51,13 +28,17 @@ copyright = "2023 Tomás Farías All rights reserved"
   avatar = "img/avatar.avif"
 
   [[params.social]]
-    icon = "github"
-    name = "My GitHub"
+    icon = "fa-brands fa-github"
+    name = "GitHub"
     url = "https://github.com/tomasfarias"
   [[params.social]]
-    icon = "gitlab"
-    name = "My GitLab"
-    url = "https://gitlab.com/tomasfarias"
+    icon = "fa-brands fa-linkedin"
+    name = "LinkedIn"
+    url = "https://www.linkedin.com/in/tomasfarias/"
+  [[params.social]]
+    icon = "fa-solid fa-envelope"
+    name = "MailTo"
+    url = "mailto:tomas@tomasfarias.dev"
 
   [params.style]
     darkestColor = "#121212"

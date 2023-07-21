@@ -45,7 +45,7 @@ Airflow specifically mentions Python's `datetime.now()` function from the standa
 
 Picture the following example scenario: our company processes sales during the day, and after the work day ends we run a dbt table model to produce a report of the sales of the day:
 
-```sql {linenos=table}
+```sql
 SELECT
   id,
   customer_id,
@@ -64,7 +64,7 @@ In this scenario, we can retry the Airflow tasks as many times as we want, and t
 
 So, let's rewrite the model to uphold Airflow's recommendation. Instead of a volatile function, we will rely on [dbt variables](https://docs.getdbt.com/docs/building-a-dbt-project/building-models/using-variables) and the [`var` function](https://docs.getdbt.com/reference/dbt-jinja-functions/var)[^5]:
 
-```sql {linenos=table,hl_lines=[10]}
+```sql {hl_lines=[10]}
 SELECT
   id,
   customer_id,

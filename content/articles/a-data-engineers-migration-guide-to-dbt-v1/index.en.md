@@ -26,7 +26,7 @@ Unfortunately, as of the time of writing, the [official Docker images](https://h
 
 If you rely on the Docker image for production, development, or CI/CD I recommend either **holding off** on the upgrade until the new images are available, or **building your own** using the official Dockerfile:
 
-```sh {linenos=table}
+```sh
 git clone https://github.com/dbt-labs/dbt-core
 cd dbt-core
 docker build -t dbt:1.0.0 \
@@ -37,7 +37,7 @@ docker build -t dbt:1.0.0 \
 
 I'm don't know too much about the Docker image building pipeline used by dbt-labs, as I couldn't find any relevant GitHub actions, so I just plugged in arguments that work. You could probably write a more straight forward image:
 
-```docker {linenos=table,hl_lines[19]}
+```docker {hl_lines=[19]}
 ARG BASE_IMAGE=python:3.8-slim-bullseye
 
 FROM $BASE_IMAGE
@@ -85,7 +85,7 @@ Significant changes have come to the configuration of your `dbt_project.yml`. He
 
 All these changes should be pretty straight-forward: assuming that your `dbt_project.yml` file in v0.21 was:
 
-```yaml {linenos=table}
+```yaml
 name: 'my_new_project'
 version: '1.0.0'
 config-version: 2
@@ -116,7 +116,7 @@ seeds:
 
 Your v1.0.0 `dbt_project.yml` now needs attention in the following lines:
 
-```yaml {linenos=table,hl_lines=["7-10",15,18,26]}
+```yaml {hl_lines=["7-10",15,18,26]}
 name: 'my_new_project'
 version: '1.0.0'
 config-version: 2
@@ -153,21 +153,21 @@ This section covers changes that affect the way we invoke `dbt` commands, either
 
 Before v1.0.0, `dbt` tests came in **two** flavors: `data` and `schema` tests. These are now `singular` and `generic` tests. This changes the invocation of the `dbt test` command as `--data` and `--schema` flags are now deprecated. This means:
 
-```sh {linenos=table}
+```sh
 dbt test --data
 dbt test --schema
 ```
 
 Has become:
 
-```sh {linenos=table}
+```sh
 dbt test --select test_type:singular
 dbt test --select test_type:generic
 ```
 
 The `test_type` selection method still accepts `data` and `schema` for backwards compatibility:
 
-```sh {linenos=table}
+```sh
 dbt test --select test_type:data test_type:schema
 ```
 
@@ -177,7 +177,7 @@ But I would still recommend migrating these invocations too as backwards compati
 
 As of version 0.10, `airflow-dbt-python` reflects these flag changes by deprecating the `data` and `schema` attributes of `DbtTestOperator` in favor of `singular` and `generic`. This means:
 
-```python {linenos=table}
+```python
 data_tests = DbtTestOperator(
     task_id="dbt_test",
     data=True,
@@ -194,7 +194,7 @@ all_tests = DbtTestOperator(
 
 Now becomes:
 
-```python {linenos=table,hl_lines=[3,7,11]}
+```python {hl_lines=[3,7,11]}
 singular_tests = DbtTestOperator(
     task_id="dbt_test",
     singular=True,
@@ -225,13 +225,13 @@ On the arguments side:
 
 Eventually, the RPC is being replaced by a new dbt Server. In the meantime, you will have to install the `dbt-rpc` package to continue using the RPC server:
 
-```sh {linenos=table}
+```sh
 pip install dbt-rpc
 ```
 
 Also, instead of using the `dbt rpc` command, you will have to call:
 
-```sh {linenos=table}
+```sh
 dbt-rpc serve
 ```
 
