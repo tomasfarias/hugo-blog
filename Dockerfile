@@ -2,7 +2,7 @@ FROM debian:bullseye AS builder
 
 MAINTAINER Tomás Farías Santana <tomas@tomasfarias.dev>
 
-ENV HUGO_VERSION=0.111.3
+ENV HUGO_VERSION=0.115.4
 
 RUN apt -y update \
     && apt -y install curl git \
@@ -17,7 +17,7 @@ COPY . .
 RUN git submodule update --init
 RUN hugo
 
-FROM caddy:2.6.4-alpine
+FROM caddy:2.7-alpine
 
 COPY --from=builder /blog/public ./public
 
