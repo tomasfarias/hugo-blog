@@ -6,4 +6,4 @@
 	url = https://github.com/janraasch/hugo-bearblog.git
 [submodule "themes/hugo-bearcub"]
 	path = themes/hugo-bearcub
-	url = https://github.com/tomasfarias/hugo-bearcub.git
+	url = https://github.com/tomasfarias/hugo-bearcub
