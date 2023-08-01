@@ -8,4 +8,4 @@
 
 ** Welcome, I'm *Tomás*!
 
-Visit my [[/articles][blog]] or take a look at some of my work in [[https://github.com/tomasfarias][GitHub]]. Most of my work is in Python, sometimes Rust.
+I'm a developer that enjoys working with Python, Rust, and others. Here you can read my [[/articles][blog]], as well as the [[/til][things I've learned]]. You can also head over to my [[https://github.com/tomasfarias][GitHub]] to take a look at some of my work. Thank you for visiting!

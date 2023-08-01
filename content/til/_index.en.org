@@ -1,0 +1,7 @@
+#+TITLE: Today I Learned
+#+PATH: til
+#+MENU: main
+#+DATE: 2023-08-01
+#+AUTHOR: Tomás Farías Santana
+#+WEIGHT: 3
+#+DESCRIPTION: Short posts of things I have learned or have taught somebody.
