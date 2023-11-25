@@ -1,0 +1,56 @@
+#+TITLE: TIL: SKIP LOCKED can be used to implement a queue in PostgreSQL
+#+DATE: 2023-11-25
+#+AUTHOR: Tomás Farías Santana
+#+TAGS[]: postgresql databases locks
+
+* TIL: ~SKIP LOCKED~ can be used to implement a queue in PostgreSQL
+
+A queue is used as a synchronization primitive to distribute work across many workers. On one end of the queue, one or more producers will call ~enqueue~ to append work items to the queue, and on the other end of the queue workers will call ~dequeue~ to pop the first item from the queue and do some work with it[fn:1].
+
+Let's create a PostgreSQL table to hold our queue items:
+
+#+BEGIN_SRC sql
+  CREATE TABLE queue (index SERIAL PRIMARY KEY, item INT);
+#+END_SRC
+
+Let's see how we can implement our basic queue methods: ~enqueue~ and ~dequeue~. ~enqueue~ can be implemented by an ~INSERT~ query, as appending a new tuple to the table is quite analogous to appending an item to a queue:
+
+#+BEGIN_SRC sql
+  INSERT INTO queue (item) VALUES (1);
+  INSERT INTO queue (item) VALUES (2);
+#+END_SRC
+
+Initially, ~dequeue~ can be implemented with a ~DELETE ... RETURNING~ query:
+
+#+BEGIN_SRC sql
+  DELETE FROM queue
+  RETURNING item;
+#+END_SRC
+
+This implementation will consume and delete the entire queue on every query. So, our workers need to be prepared to handle multiple work items, which is not quite what we had in mind. Moreover, depending on the relation between work item production speed and the time it takes to do the work, we may end up with a lot of idle workers, and a few very overloaded workers.
+
+Clearly, we need to select only the first item at the top of the queue. Thankfully, we have a serial primary key:
+
+#+BEGIN_SRC sql
+  DELETE FROM queue
+  WHERE index = (SELECT index FROM queue ORDER BY index LIMIT 1)
+  RETURNING item;
+#+END_SRC
+
+This implementation complies with our queue API, but it does not scale well with the number of workers: in order to obtain a work item, the first worker will have to hold a ~ROW EXCLUSIVE~ lock. This lock may be held while the work is being done, but at the very least it will be held until the worker receives the work item.
+
+In our example we have inserted two work items into the queue, and we would like if two concurrent workers were able to get one of the two work items and execute the work in parallel. However, after the first worker gets its value, the ~SELECT~ subquery in the ~WHERE~ clause of our ~DELETE ... RETURNING~ query will attempt to acquire a ~ROW SHARE~ lock to figure out which is the first item in the queue, and the second worker will have to wait in line until the first worker finishes.
+
+TIL that we can use a ~FOR UPDATE ... SKIP LOCKED~ clause in our ~SELECT~ subquery to get around this problem (see the [[https://www.postgresql.org/docs/current/sql-select.html#SQL-FOR-UPDATE-SHARE][documenation]]). ~SKIP LOCKED~ will work with an incomplete view of the data; in our case that means all the work items that have not been picked up by a worker. Since this incomplete view doesn't include any locked rows, our query will return immediately with a work item if available, or nothing if the queue is empty.
+
+#+BEGIN_SRC sql
+  DELETE FROM queue
+  WHERE index = (SELECT index FROM queue ORDER BY index FOR UPDATE SKIP LOCKED LIMIT 1)
+  RETURNING item;
+#+END_SRC
+
+And our workers can now do their work in parallel! PostgreSQL locking mechanism is now working for us by ensuring that no repeated values are handed out to our workers, leaving us more time to answer that incident page caused by a different concurrency-related bug...
+
+* Footnotes
+
+[fn:1] For simplicity, I'm describing a single-ended queue.
