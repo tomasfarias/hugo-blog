@@ -2,7 +2,7 @@ FROM debian:bullseye AS builder
 
 MAINTAINER Tomás Farías Santana <tomas@tomasfarias.dev>
 
-ENV HUGO_VERSION=0.115.4
+ENV HUGO_VERSION=0.120.4
 
 RUN apt -y update \
     && apt -y install curl git \
