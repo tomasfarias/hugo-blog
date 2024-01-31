@@ -1,6 +1,6 @@
 # hugo-blog
 
-This is my personal blog, powered by [hugo](https://www.gohugo.io/) and served by [caddy](https://caddyserver.com/). I use a customized theme based on [LoveIt](https://github.com/dillonzq/LoveIt). Visit my blog at [tomasfarias.dev](https://tomasfarias.dev)!
+This is my personal blog, powered by [hugo](https://www.gohugo.io/) and served by [caddy](https://caddyserver.com/). I use a customized theme based on the simple but stylish [hugo-bearcub](https://github.com/clente/hugo-bearcub). Visit my blog at [tomasfarias.dev](https://tomasfarias.dev)!
 
 # Why hugo?
 
