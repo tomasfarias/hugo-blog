@@ -2,7 +2,8 @@
 #+DATE: 2023-02-27
 #+AUTHOR: Tomás Farías Santana
 #+AUTHOR_LINK: https://tomasfarias.dev
-#+TAGS: python pytest parametrize
+#+TAGS[]: python pytest parametrize
+#+STARTUP: inlineimages
 
 The two features [[https://pypi.org/project/pytest/][pytest]] features I use the most are [[https://docs.pytest.org/en/latest/explanation/fixtures.html#about-fixtures][fixtures]] and [[https://docs.pytest.org/en/latest/how-to/parametrize.html][parametrize]] (~pytest.mark.parametrize~). This post is about how you can use the latter to write concise, reusable, and readable tests.
 

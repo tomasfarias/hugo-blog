@@ -1,0 +1,65 @@
+#+TITLE: TIL: Or "Today I Remembered" the role of a comma in a tuple
+#+DATE: 2024-08-21
+#+AUTHOR: Tomás Farías Santana
+#+AUTHOR_LINK: https://tomasfarias.dev
+#+TAGS[]: python tuple
+#+STARTUP: inlineimages
+
+I hope I am not the only one who encloses all or most of their tuples with parentheses, to the point that seeing something like this:
+
+#+BEGIN_SRC python
+  tuple_of_things = "one_thing", "another_thing", "final_thing"
+#+END_SRC
+
+Makes me feel uneasy.
+
+Well, *Today I +Learned+ Remembered* the role of a comma in a tuple.
+
+** Panic sets in when the regular expression doesn't match
+Imagine my surprise when I was shown a regular expression that was trying to extract an S3 bucket ID: By convention, the application was using bucket IDs that are composed of a well-known prefix followed by a dash and 5 to 12 numbers. This seemed like something a straight-forward regular expression pattern could match:
+
+#+BEGIN_SRC python :results output
+  import re
+
+  haystack = "arn:aws:s3:::bucket-1234567890/path/to/key"
+  bucket_prefix = "bucket"
+  result = re.search(f"{bucket_prefix}-[0-9]{5,12}", haystack)
+  print(result)
+#+END_SRC
+
+No match, no exception being raised.
+
+** Looking for help
+Naturally, I did what everyone does when debugging regular expressions: Went to the first regular expression tester that popped up online, made sure it had support for Python flavor, and popped in what I thought was the pattern I was matching. Of course, I had to resolve the f-string when copying the pattern to the online tool:
+
+#+ATTR_HTML: :alt A screenshot of regex101 showing the pattern used to match the numeric bucket ID in a test string.
+#+ATTR_HTML: :title Screenshot of regex101
+[[file:regex_tool.png]]
+
+Good! /I am still worthy/... At least for simple regular expressions like this. But this doesn't answer the original question: Why is the code not matching then?
+
+** Of course! The comma makes it a tuple!
+Finally, the realization hit as I noticed these special characters ~{5,12}~ are missing an extra set of curly braces. Without the additional characters for escaping, the f-string is resolving the string as ~"bucket-[0-9](5, 12)"~ because ~5,12~ is a *tuple*!
+
+For completion's sake, here is the working code:
+
+#+BEGIN_SRC python :results output :exports both
+  import re
+
+  haystack = "arn:aws:s3:::bucket-1234567890/path/to/key"
+  bucket_prefix = "bucket"
+  result = re.search(f"{bucket_prefix}-[0-9]{{5,12}}", haystack)
+  print(result)
+#+END_SRC
+
+Which now gives us a match:
+#+BEGIN_SRC
+  <re.Match object; span=(13, 30), match='bucket-1234567890'>
+#+END_SRC
+
+** Wrapping up
+Not quite a "Today I Learned" but a "Today I Remembered" as I am pretty sure I learned very early on in my Python studies that it is the *comma* that makes the tuple, *not* the *parentheses*. What's more, [[https://docs.python.org/3/library/stdtypes.html#tuple][the docs]] call it out explicitly, and I have those pages open pretty much all day! However, this detail doesn't come up a lot when writing code, at least with my policy of wrap-all-tuples-in-parentheses.
+
+This post is not about a ground-breaking discovery, but I felt good when remembering a little fact I learned all those years ago when I was an aspiring Pythonista.
+
+Always be (re-)learning!
