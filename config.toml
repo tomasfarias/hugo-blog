@@ -10,22 +10,33 @@ theme = "hugo-bearcub"
 enableRobotsTXT = true
 enableEmoji = true
 
-copyright = "Copyright © 2023, Tomás Farías."
+copyright = "Copyright © 2023, Tomás Farías Santana."
 
-[author]
-  name = "Tomás Farías"
-  email = "tomas@tomasfarias.dev"
-  link = "https://tomasfarias.dev"
+[module]
+  [[module.mounts]]
+    source = "content"
+    target = "content"
+    excludeFiles = '/articles/**/**.org'
 
 [markup]
   [markup.highlight]
     style = "solarized-dark"
     lineNumbersInTable = false
+  [markup.goldmark.renderer]
+    unsafe = true
+
 
 [params]
-  author = "Tomás Farías Santana"
   description = "A blog on topics sorrounding software, data, and other interests."
   avatar = "img/avatar.avif"
+  themeStyle = "original"
+  favicon = "favicon.ico"
+  ignoreFiles = [ '\.org$' ]
+
+  [params.author]
+    name = "Tomás Farías Santana"
+    email = "tomas@tomasfarias.dev"
+    link = "https://tomasfarias.dev"
 
   [[params.social]]
     icon = "fa-brands fa-github"
@@ -39,13 +50,6 @@ copyright = "Copyright © 2023, Tomás Farías."
     icon = "fa-solid fa-envelope"
     name = "MailTo"
     url = "mailto:tomas@tomasfarias.dev"
-
-  [params.style]
-    darkestColor = "#121212"
-    darkColor = "#181818"
-    lightColor = "#D8DEE9"
-    lightestColor = "#E5E9F0"
-    primaryColor = "#5E81AC"
 
 [taxonomies]
     tags = "tags"
