@@ -1,24 +1,20 @@
-#+TITLE: Parametrize your pytest tests
-#+DATE: 2023-02-27
-#+AUTHOR: Tomás Farías Santana
-#+AUTHOR_LINK: https://tomasfarias.dev
-#+TAGS[]: python pytest parametrize
-#+STARTUP: inlineimages
-#+HUGO_BASE_DIR: ../../../.
-#+HUGO_SECTION: articles/parametrize-your-pytest-tests/
++++
+title = "Parametrize your pytest tests"
+author = ["Tomás Farías Santana"]
+date = 2023-02-27
+draft = false
++++
 
-The two features [[https://pypi.org/project/pytest/][pytest]] features I use the most are [[https://docs.pytest.org/en/latest/explanation/fixtures.html#about-fixtures][fixtures]] and [[https://docs.pytest.org/en/latest/how-to/parametrize.html][parametrize]] (~pytest.mark.parametrize~). This post is about how you can use the latter to write concise, reusable, and readable tests.
+The two features [pytest](https://pypi.org/project/pytest/) features I use the most are [fixtures](https://docs.pytest.org/en/latest/explanation/fixtures.html#about-fixtures) and [parametrize](https://docs.pytest.org/en/latest/how-to/parametrize.html) (`pytest.mark.parametrize`). This post is about how you can use the latter to write concise, reusable, and readable tests.
 
-* More tests in less lines of code with parametrize
-The ~pytest.mark.parametrize~ decorator generates a test for each tuple of parameters we pass it, which *drastically* reduces the lines of code in written unit tests, as the same unit test can be re-used for each tuple of different parameters.
+
+## More tests in less lines of code with parametrize {#more-tests-in-less-lines-of-code-with-parametrize}
+
+The `pytest.mark.parametrize` decorator generates a test for each tuple of parameters we pass it, which **drastically** reduces the lines of code in written unit tests, as the same unit test can be re-used for each tuple of different parameters.
 
 Here is an example:
-#+BEGIN_SRC bash :results silent :session s :exports none
-./.direnv/python-3.11.4/bin/activate
-#+END_SRC
 
-#+CAPTION: /One unit test turns into 8 with parametrize/
-#+BEGIN_SRC python -n 1 :session s :results silent :exports code :tangle test.py
+```python { linenos=true, linenostart=1 }
 import typing
 
 import pytest
@@ -73,11 +69,15 @@ def test_fibonacci_range(start: int, stop: int, step: int):
     """Test the fibonacci_range function with multiple inputs."""
     computed_sequence = list(fibonacci_range(start, stop, step))
     assert computed_sequence == TEST_SEQUENCES[(start, stop, step)]
-#+END_SRC
+```
+<div class="src-block-caption">
+  <span class="src-block-number">Code Snippet 1:</span>
+  <i>One unit test turns into 8 with parametrize</i>
+</div>
 
-Pytest will now generate one test per each tuple we have passed to the ~pytest.mark.parametrize~. The values in each tuple will be used as arguments for the ~test_fibonacci_range~ test function. Running ~pytest~ will report that our test run included 6 tests, one for each tuple[fn:1]:
+Pytest will now generate one test per each tuple we have passed to the `pytest.mark.parametrize`. The values in each tuple will be used as arguments for the `test_fibonacci_range` test function. Running `pytest` will report that our test run included 6 tests, one for each tuple[^fn:1]:
 
-#+BEGIN_SRC sh
+```sh
 $  pytest test.py::test_fibonacci_range -vv
 ============================================ test session starts ==========================================
 platform linux -- Python 3.11.4, pytest-7.4.2, pluggy-1.3.0 -- $HUGO_BLOG/.direnv/python-3.11.4/bin/python
@@ -95,13 +95,13 @@ test.py::test_fibonacci_range[0-15-1] PASSED                                    
 test.py::test_fibonacci_range[0-15-2] PASSED                                                          [100%]
 
 ============================================= 8 passed in 0.01s ============================================
-#+END_SRC
+```
 
-We got 6 tests for the price (in lines of code) of one[fn:2]!
+We got 6 tests for the price (in lines of code) of one[^fn:2]!
 
-Next to each item, enclosed in square brackets, we see the parameters used for each test, separated by a dash: ~[0-1-1]~, ~[0-1-2]~, and so on. Each generated test can also be ran individually by specifying the parameters at the end of the test we wish to run[fn:3]:
+Next to each item, enclosed in square brackets, we see the parameters used for each test, separated by a dash: `[0-1-1]`, `[0-1-2]`, and so on. Each generated test can also be ran individually by specifying the parameters at the end of the test we wish to run[^fn:3]:
 
-#+BEGIN_SRC sh
+```sh
 $  pytest 'test.py::test_fibonacci_range[0-1-1]' -vv
 ============================================ test session starts ==========================================
 platform linux -- Python 3.11.4, pytest-7.4.2, pluggy-1.3.0 -- $HUGO_BLOG/.direnv/python-3.11.4/bin/python
@@ -112,15 +112,16 @@ collected 1 item
 test.py::test_fibonacci_range[0-1-1] PASSED                                                          [100%]
 
 ============================================= 1 passed in 0.00s ===========================================
-#+END_SRC
+```
 
-* Stacking parametrize decorators
-In our example, we passed multiple arguments to parametrize ~test_fibonacci_range~: ~start~, ~stop~, and ~step~. Writing down all the possible parameter tuples we are interested in testing for each argument combination can take up a lot of time. Thankfully, pytest allows us to stack ~pytest.mark.parametrize~ decorators to get all possible combinations of parameters.
+
+## Stacking parametrize decorators {#stacking-parametrize-decorators}
+
+In our example, we passed multiple arguments to parametrize `test_fibonacci_range`: `start`, `stop`, and `step`. Writing down all the possible parameter tuples we are interested in testing for each argument combination can take up a lot of time. Thankfully, pytest allows us to stack `pytest.mark.parametrize` decorators to get all possible combinations of parameters.
 
 By stacking decorators, our example test can be re-written as:
 
-#+CAPTION: /Stacking parametrize decorators produces a Cartesian product of all parameters/
-#+BEGIN_SRC python -n 1 :session s :results silent :exports code :tangle test.py
+```python { linenos=true, linenostart=1 }
 @pytest.mark.parametrize("start", [0])
 @pytest.mark.parametrize("stop", [1, 2, 5, 15])
 @pytest.mark.parametrize("step", [1, 2])
@@ -128,11 +129,15 @@ def test_fibonacci_range_stacked(start: int, stop: int, step: int):
     """Test the fibonacci_range function with multiple inputs."""
     computed_sequence = list(fibonacci_range(start, stop, step))
     assert computed_sequence == TEST_SEQUENCES[(start, stop, step)]
-#+END_SRC
+```
+<div class="src-block-caption">
+  <span class="src-block-number">Code Snippet 2:</span>
+  <i>Stacking parametrize decorators produces a Cartesian product of all parameters</i>
+</div>
 
 Which generates the same 8 parameter tuples passed to parametrize the test as the previous version of this example:
 
-#+BEGIN_SRC sh
+```sh
 $  pytest test.py::test_fibonacci_range_stacked -vv
 ============================================= test session starts =========================================
 platform linux -- Python 3.11.4, pytest-7.4.2, pluggy-1.3.0 -- $HUGO_BLOG/.direnv/python-3.11.4/bin/python
@@ -150,26 +155,27 @@ test.py::test_fibonacci_range_stacked[2-5-0] PASSED                             
 test.py::test_fibonacci_range_stacked[2-15-0] PASSED                                                [100%]
 
 ============================================= 8 passed in 0.01s ===========================================
-#+END_SRC
+```
 
-#+BEGIN_QUOTE
-When generating parameter tuples, pytest will iterate over all the parameters in one decorator before advancing to the next parameter in the decorators that follow.
+> When generating parameter tuples, pytest will iterate over all the parameters in one decorator before advancing to the next parameter in the decorators that follow.
+>
+> This is equivalent to a `for` loop:
+>
+> ```python
+> for step in [1, 2]:
+>     for stop in [1, 2, 5, 15]:
+>         for start in [0]:
+>             yield (step, stop, start)
+> ```
 
-This is equivalent to a ~for~ loop:
-#+BEGIN_SRC python
-for step in [1, 2]:
-    for stop in [1, 2, 5, 15]:
-        for start in [0]:
-            yield (step, stop, start)
-#+END_SRC
-#+END_QUOTE
 
-* Pass parameters to pytest fixtures
-Pytest fixtures are used to hide away complicated setup steps required for unit testing. We can pass parameters to fixtures by matching the name of a fixture with the name of an argument used in ~pytest.mark.parametrize~ and setting the ~indirect~ argument.
+## Pass parameters to pytest fixtures {#pass-parameters-to-pytest-fixtures}
+
+Pytest fixtures are used to hide away complicated setup steps required for unit testing. We can pass parameters to fixtures by matching the name of a fixture with the name of an argument used in `pytest.mark.parametrize` and setting the `indirect` argument.
 
 For example, imagine you build an app that can interact with multiple database backends. Regardless, of the database backend in use, our app should function the same. As we have abstracted all database interaction under a common interface, we can write a single test and parametrize it to run with multiple backends. We already have fixtures that return test clients for each of our databases, used in the unit tests for each of the clients, so we can write a fixture that can returns both according to how we parametrize it:
 
-#+BEGIN_SRC python -n 1 :session s :results silent :exports code :tangle test_3.py
+````python { linenos=true, linenostart=1 }
 import pytest
 
 
@@ -187,17 +193,18 @@ def db_client(request, postgres_client, mysql_client):
 def test_db_operation(db_client):
     """Test an operation that can be executed on multiple RDBMS."""
     ...
-#+END_SRC
+````
 
-Any application test can use the ~db_client~ fixture and ensure it behaves the same regardless of database backend.
+Any application test can use the `db_client` fixture and ensure it behaves the same regardless of database backend.
 
-* Customize the parameter ids in the test report
-Pytest allows us to customize the id of each parameter that will be shown in the test report. This can be useful to have *human readable names* in our test reports.
+
+## Customize the parameter ids in the test report {#customize-the-parameter-ids-in-the-test-report}
+
+Pytest allows us to customize the id of each parameter that will be shown in the test report. This can be useful to have **human readable names** in our test reports.
 
 Coming back to our first example:
 
-#+CAPTION: /Our step arguments now have names/
-#+BEGIN_SRC python -n 1 :session s :results silent :exports code :tangle test.py
+````python { linenos=true, linenostart=1 }
 @pytest.mark.parametrize("start", [0])
 @pytest.mark.parametrize("stop", [1, 2, 5, 15])
 @pytest.mark.parametrize("step", [1, 2], ids=["single", "double"])
@@ -205,10 +212,15 @@ def test_fibonacci_range_with_ids(start: int, stop: int, step: int):
     """Test the fibonacci_range function with multiple inputs."""
     computed_sequence = list(fibonacci_range(start, stop, step))
     assert computed_sequence == TEST_SEQUENCES[(start, stop, step)]
-#+END_SRC
+````
+<div class="src-block-caption">
+  <span class="src-block-number">Code Snippet 3:</span>
+  <i>Our step arguments now have names</i>
+</div>
 
 In our test report, pytest will output "single" and "double" as the parameter ids instead of 1 and 2 respectively:
-#+BEGIN_SRC sh
+
+````sh
 $  pytest test.py::test_fibonacci_range_with_ids -vv
 ============================================= test session starts =========================================
 platform linux -- Python 3.11.4, pytest-7.4.2, pluggy-1.3.0 -- $HUGO_BLOG/.direnv/python-3.11.4/bin/python
@@ -226,12 +238,11 @@ test.py::test_fibonacci_range_with_ids[double-5-0] PASSED                       
 test.py::test_fibonacci_range_with_ids[double-15-0] PASSED                                          [100%]
 
 ====================================================== 8 passed in 0.01s ==================================
-#+END_SRC
+````
 
-This is significantly more useful with complex types where pytest's default behavior is to take the argument name and concatenate an index, like with instances of ~datetime.datetime~:
+This is significantly more useful with complex types where pytest's default behavior is to take the argument name and concatenate an index, like with instances of `datetime.datetime`:
 
-#+CAPTION: /Using month names as ids/
-#+BEGIN_SRC python -n 1 :session s :results silent :exports code :tangle test_2.py
+````python { linenos=true, linenostart=1 }
 import datetime as dt
 
 import pytest
@@ -253,11 +264,15 @@ def test_year_is_2023(date):
 def test_year_is_2023_with_ids(date):
     """Dummy test."""
     assert date.year == 2023
-#+END_SRC
+````
+<div class="src-block-caption">
+  <span class="src-block-number">Code Snippet 4:</span>
+  <i>Using month names as ids</i>
+</div>
 
-The pytest test report will show ~date{index}~ for ~test_year_is_2023~ and the month names for ~test_year_is_2023_with_ids~:
+The pytest test report will show `date{index}` for `test_year_is_2023` and the month names for `test_year_is_2023_with_ids`:
 
-#+BEGIN_SRC sh
+````sh
 $  pytest test_2.py -vv
 ============================================= test session starts =========================================
 platform linux -- Python 3.11.4, pytest-7.4.2, pluggy-1.3.0 -- $HUGO_BLOG/.direnv/python-3.11.4/bin/python
@@ -291,31 +306,34 @@ test_2.py::test_year_is_2023_with_ids[November] PASSED                          
 test_2.py::test_year_is_2023_with_ids[December] PASSED                                              [100%]
 
 ===================================================== 24 passed in 0.02s ==================================
-#+END_SRC
+````
 
-* Why not to parametrize
-Although ~pytest.mark.parametrize~ has become a staple of my unit tests, it comes at the cost of complexity and performance, like with many other abstraction layers.
 
-As ~pytest.mark.parametrize~ makes it really easy to generate new tests, it is tempting to want to include as many parameter combinations as possible. This temptation comes up *a lot* when stacking ~pytest.mark.parametrize~ decorators.
+## Why not to parametrize {#why-not-to-parametrize}
+
+Although `pytest.mark.parametrize` has become a staple of my unit tests, it comes at the cost of complexity and performance, like with many other abstraction layers.
+
+As `pytest.mark.parametrize` makes it really easy to generate new tests, it is tempting to want to include as many parameter combinations as possible. This temptation comes up **a lot** when stacking `pytest.mark.parametrize` decorators.
 
 But doing so cause problems:
-1. We may be led to believe our tests are *exhaustive* when in fact we are not covering our *problem domain*.
-   + "My unit test is has coverage of every possible 32-bit signed integer, what do you mean it's failing?".
-   + "Well, a user has a balance of $0.50 in their account...".
-2. With too many tests, a test suite can take too long to run[fn:4].
-   + A test suite that nobody runs is useless, and the more time a test suite takes to run, the less frequently it will be ran.
-3. It can be easy to obfuscate the generated test cases by setting (or not setting) ids, or with complex code to generate argument tuples.
-   + With every new argument we parametrize, the number of possible combinations (and in turn the number of tests) can grow exponentially.
-   + When debugging, we now may need to keep in our minds not only the test but the code that generates the test.
 
-* In conclusion
-When I started using pytest I was mostly annoyed about having to replace all my ~self.assertEqual~ calls for ~assert~ statements. It wasn't until I started diving into its [[https://docs.pytest.org/en/latest/][documentation]] that I learned why is it so loved as a testing framework. ~pytest.mark.parametrize~ is just one of the features of pytest I regularly now employ in my unit tests, and I wanted to give you a glimpse of how that looks.
+1.  We may be led to believe our tests are **exhaustive** when in fact we are not covering our **problem domain**.
+    -   "My unit test is has coverage of every possible 32-bit signed integer, what do you mean it's failing?".
+    -   "Well, a user has a balance of $0.50 in their account...".
+2.  With too many tests, a test suite can take too long to run[^fn:4].
+    -   A test suite that nobody runs is useless, and the more time a test suite takes to run, the less frequently it will be ran.
+3.  It can be easy to obfuscate the generated test cases by setting (or not setting) ids, or with complex code to generate argument tuples.
+    -   With every new argument we parametrize, the number of possible combinations (and in turn the number of tests) can grow exponentially.
+    -   When debugging, we now may need to keep in our minds not only the test but the code that generates the test.
+
+
+## In conclusion {#in-conclusion}
+
+When I started using pytest I was mostly annoyed about having to replace all my `self.assertEqual` calls for `assert` statements. It wasn't until I started diving into its [documentation](https://docs.pytest.org/en/latest/) that I learned why is it so loved as a testing framework. `pytest.mark.parametrize` is just one of the features of pytest I regularly now employ in my unit tests, and I wanted to give you a glimpse of how that looks.
 
 There is a lot more going for pytest, like fixtures and plugins, and I hope to cover more of that in the future.
 
-* Footnotes
-
-[fn:1] I like the expressiveness of 2 levels of verbosity (~-vv~).
-[fn:2] And the "price" of writing the decorator, which remains constant relative to the lines in our test.
-[fn:3] Notice the test item is enclosed in quotes. Alternatively, we would have to escape the square brackets.
-[fn:4] This point can be addressed by having a reduced test suite to run during development, and a complete test suite to run before deployment.
+[^fn:1]: I like the expressiveness of 2 levels of verbosity (`-vv`).
+[^fn:2]: And the "price" of writing the decorator, which remains constant relative to the lines in our test.
+[^fn:3]: Notice the test item is enclosed in quotes. Alternatively, we would have to escape the square brackets.
+[^fn:4]: This point can be addressed by having a reduced test suite to run during development, and a complete test suite to run before deployment.

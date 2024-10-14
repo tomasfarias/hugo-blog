@@ -1,2 +1,4 @@
 # Hugo cache
 resources/
+
+.dir-locals.el
