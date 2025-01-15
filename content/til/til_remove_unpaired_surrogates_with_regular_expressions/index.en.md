@@ -85,7 +85,8 @@ SELECT
 See the problem? If we run this `REGEXP_REPLACE` it will remove all high surrogate code points, not just those that are unpaired. Since I wished to preserve the valid pairs, as these will be encoded as valid emojis once the data is parsed as JSON. And yes, it is critical that we minimize data loss... Even if the data that would be lost is some emojis.
 
 Reading through the [documentation of BigQuery's `REGEXP_REPLACE` function](https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#regexp_replace), I learned about a particular feature:
-&gt; You can use backslashed-escaped digits (\\1 to \\9) within the replacement argument to insert text matching the corresponding parenthesized group in the regexp pattern. Use \\0 to refer to the entire matching text.
+
+> You can use backslashed-escaped digits (\\1 to \\9) within the replacement argument to insert text matching the corresponding parenthesized group in the regexp pattern. Use \\0 to refer to the entire matching text.
 
 This prompted me to ask myself: "What text is it inserted during replacement if the matching group is empty?" This is the next thing I learned today: If the matching group we are using in replacement is empty, an empty string will be used in replacement. So, what I needed to craft is a regular expression that:
 
