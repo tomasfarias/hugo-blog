@@ -7,8 +7,6 @@
 #+HUGO_BASE_DIR: ../../../.
 #+HUGO_SECTION: til/til_skip_locked_can_be_used_to_implement_a_queue_in_postgres
 
-AAAAAAAAAAAAa
-
 A queue is used as a synchronization primitive to distribute work across many workers. On one end of the queue, one or more producers will call ~enqueue~ to append work items to the queue, and on the other end of the queue workers will call ~dequeue~ to pop the first item from the queue and do some work with it[fn:1].
 
 Let's create a PostgreSQL table to hold our queue items:
