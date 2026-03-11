@@ -5,8 +5,6 @@ date = 2023-11-25
 draft = false
 +++
 
-AAAAAAAAAAAAa
-
 A queue is used as a synchronization primitive to distribute work across many workers. On one end of the queue, one or more producers will call `enqueue` to append work items to the queue, and on the other end of the queue workers will call `dequeue` to pop the first item from the queue and do some work with it[^fn:1].
 
 Let's create a PostgreSQL table to hold our queue items:
