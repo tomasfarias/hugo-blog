@@ -1,0 +1,95 @@
+#+TITLE: Async patterns in Python: DAG traversal
+#+DATE: <2024-10-20 Sun>
+#+AUTHOR: Tomás Farías Santana
+#+AUTHOR_LINK: https://tomasfarias.dev
+#+TAGS[]: python async dag
+#+STARTUP: inlineimages
+#+HUGO_BASE_DIR: ../../../.
+#+HUGO_SECTION: articles/async-patterns-in-python-dag-traversal/
+#+DRAFT: true
+
+One of the first pieces of advice you receive when starting to write async Python code is to not block the thread running the event loop, as otherwise no other task is allowed to progress, essentially defeating the purpose of writing async code in the first place. So, I quickly learned to find and replace all blocking calls with asyncio variants, e.g. ~time.sleep(1.0)~ became ~await asyncio.sleep(1.0)~, and packages like ~requests~ were replaced by alternatives that offer async APIs, like ~aiohttp~ or ~httpx~. In several instances, this quickly become a huge task, as the process turns recursive quickly: Python coroutines have to be called from another coroutine, and then that coroutine needs to be called from another coroutine, all the way to the top of the call stack.
+
+But of course, it was all worth it! As soon as I finished ~await~-ing all those coroutines I would start rejoicing in the performance benefits of concurrent work: "I pay for 100% of the CPU, I am going to use 100% of the CPU! No idle time!".
+
+
+#+BEGIN_SRC python -n
+  import asyncio
+  import enum
+
+  NodeLabel = str
+  NodeIndex = int
+
+  class NodeStatus(enum.Enum):
+      READY = 0
+      COMPLETED = 1
+      FAILED = 2
+      FAILED_PARENT = 3
+
+  class Node:
+      label: NodeLabel
+
+  class QueueMessage:
+      node_index: NodeIndex
+      status: NodeStatus
+
+
+  Edge = tuple[NodeIndex, NodeIndex]
+  class DAG:
+      nodes: list[Node]
+      edges: list[Edge]
+
+  async def traverse_dag(dag: DAG):
+      root_nodes = set(DAG.nodes)
+      direct_children = {}
+
+      for edge in DAG.edges:
+          if edge[1] in root_nodes:
+              root_nodes.remove(edge[1])
+
+          try:
+              direct_children[edge[0]].add(edge[1])
+          except KeyError:
+              direct_children[edge[0]] = set((edge[1],))
+
+      for root_node_index in root_nodes:
+          queue.put_nowait(QueueMessage(node_index=root_node_index, status=NodeStatus.READY))
+
+      background_tasks = set()
+      processed_nodes = set()
+
+      while len(processed_nodes) < len(dag.nodes):
+          match queue.get():
+              case QueueMessage(node_index=node_index, status=NodeStatus.READY):
+                  node = DAG.nodes[node_index]
+                  work_task = asyncio.create_task(do_work_on_node(node=node))
+
+                  background_tasks.add(work_task)
+
+                  async def work_task_callback(task):
+                      background_tasks.remove(task)
+
+                      if task.exception is None:
+                          await queue.put(QueueMessage(node_index=node_index, status=NodeStatus.COMPLETED))
+                      else:
+                          await queue.put(QueueMessage(node_index=node_index, status=NodeStatus.FAILED))
+
+                  work_task.add_done_callback(work_task_callback)
+
+              case QueueMessage(node_index=node_index, status=NodeStatus.COMPLETED):
+                  processed_nodes.add(DAG.nodes[node_index])
+
+              case QueueMessage(node_index=node_index, status=NodeStatus.FAILED) | QueueMessage(node_index=node_index, status=NodeStatus.FAILED_PARENT):
+                  processed_nodes.add(DAG.nodes[node_index])
+
+                  async def enqueue_children_as_failed_parent():
+                      for children_node_index in direct_children[node_index]:
+                          await queue.put(QueueMessage(node_index=children_node_index, status=NodeStatus.FAILED_PARENT))
+
+
+  async def do_work_on_node(node: Node):
+      await asyncio.sleep(1)
+
+
+
+#+END_SRC
