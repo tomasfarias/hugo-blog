@@ -4,6 +4,8 @@
 #+AUTHOR_LINK: https://tomasfarias.dev
 #+TAGS[]: python tuple
 #+STARTUP: inlineimages
+#+HUGO_BASE_DIR: ../../../.
+#+HUGO_SECTION: til/til_or_tir_that_tuples_are_defined_by_commas
 
 I hope I am not the only one who encloses all or most of their tuples with parentheses, to the point that seeing something like this:
 

@@ -16,7 +16,7 @@ copyright = "Copyright © 2023, Tomás Farías Santana."
   [[module.mounts]]
     source = "content"
     target = "content"
-    excludeFiles = '/articles/**/**.org'
+    files = ['! /articles/**/**.org', '! /til/**/**.org']
 
 [markup]
   [markup.goldmark.renderer]

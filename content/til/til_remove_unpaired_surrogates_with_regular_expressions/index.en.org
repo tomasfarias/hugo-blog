@@ -5,7 +5,7 @@
 #+TAGS[]: re2 regex
 #+STARTUP: inlineimages
 #+HUGO_BASE_DIR: ../../../.
-#+HUGO_SECTION: til/til_remove_unpaired_surrogates_with_regular_expressions/
+#+HUGO_SECTION: til/til_remove_unpaired_surrogates_with_regular_expressions
 
 When it comes time for a computer to encode a Unicode value in UTF-16, a single or a pair of code points will be used. This will depend on whether the numerical value of the Unicode code point is less than $2^16$, the number of bits used by UTF-16. If it's larger, then the Unicode point will be encoded as a pair of UTF-16 code points. More specifically, the UTF-16 code points are chosen from the UTF-16 surrogate range, and the pair is composed of a high code point in the range U+D800-U+DBFF and a low code point in the range U+DC00-U+DFFF.
 
@@ -13,8 +13,11 @@ These code points must appear as a pair; individually they are basically garbage
 
 When I rolled over the floor to my laptop this morning I was greeted by this garbage plastered all over our logs[fn:1]:
 #+BEGIN_SRC sql
-SELECT PARSE_JSON('{"live_reaction": "🤣🤣🤣🤣🤣\\ud83e"}')
- Invalid input: syntax error while parsing value - invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF; last read: '"🤣🤣🤣🤣🤣\ud83e"'; error in PARSE_JSON expression
+  SELECT PARSE_JSON('{"live_reaction": "🤣🤣🤣🤣🤣\\ud83e"}')
+
+  Invalid input: syntax error while parsing value - invalid string:
+  surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF;
+  last read: '"🤣🤣🤣🤣🤣\ud83e"'; error in PARSE_JSON expression
 #+END_SRC
 
 I may have rolled over the floor to my laptop, but I was certainly _not_ laughing.

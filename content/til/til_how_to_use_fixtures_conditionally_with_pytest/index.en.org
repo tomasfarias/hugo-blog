@@ -1,9 +1,12 @@
 #+TITLE: TIL: How to use fixtures conditionally with pytest
-#+DATE: 2022-12-27
+#+DATE: <2022-12-27>
 #+AUTHOR: Tomás Farías Santana
+#+AUTHOR_LINK: https://tomasfarias.dev
 #+TAGS[]: python pytest fixtures
+#+STARTUP: inlineimages
+#+HUGO_BASE_DIR: ../../../.
+#+HUGO_SECTION: til/til_how_to_use_fixtures_conditionally_with_pytest
 
-* TIL: How to use fixtures conditionally with pytest
 Pytest has changed the way I write unit tests: As I work on them, I am constantly looking out for opportunities to use ~pytest.mark.parametrize~ to extend the scope of my tests, or ~pytest.fixture~ to manage resources used by tests. Recently, I learned it is possible to parametrize fixtures with ~pytest.mark.parametrize~ using the ~indirect~ argument:
 
 #+BEGIN_SRC python

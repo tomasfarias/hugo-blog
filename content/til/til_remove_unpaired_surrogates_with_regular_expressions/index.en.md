@@ -13,7 +13,10 @@ When I rolled over the floor to my laptop this morning I was greeted by this gar
 
 ```sql
 SELECT PARSE_JSON('{"live_reaction": "🤣🤣🤣🤣🤣\\ud83e"}')
- Invalid input: syntax error while parsing value - invalid string: surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF; last read: '"🤣🤣🤣🤣🤣\ud83e"'; error in PARSE_JSON expression
+
+Invalid input: syntax error while parsing value - invalid string:
+surrogate U+D800..U+DBFF must be followed by U+DC00..U+DFFF;
+last read: '"🤣🤣🤣🤣🤣\ud83e"'; error in PARSE_JSON expression
 ```
 
 I may have rolled over the floor to my laptop, but I was certainly <span class="underline">not</span> laughing.
