@@ -19,12 +19,10 @@ copyright = "Copyright © 2023, Tomás Farías Santana."
     excludeFiles = '/articles/**/**.org'
 
 [markup]
-  [markup.highlight]
-    style = "solarized-dark"
-    lineNumbersInTable = false
   [markup.goldmark.renderer]
     unsafe = true
-
+  [markup.highlight]
+    noClasses = false
 
 [params]
   description = "A blog on topics sorrounding software, data, and other interests."
