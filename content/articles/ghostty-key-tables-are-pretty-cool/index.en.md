@@ -1,8 +1,10 @@
 +++
 title = "Ghostty's key tables are pretty cool"
 author = ["Tomás Farías Santana"]
+authorLink = "https://tomasfarias.dev"
 date = 2026-03-11T00:00:00+01:00
 draft = false
+tags = ["terminal"]
 +++
 
 I have used many terminal emulators over the years and eventually settled on [Ghostty](https://ghostty.org) since it became publicly available not too long ago. I can't really recall what drew me to it, maybe I was just curious and wanted to see what the hype was about, or maybe the cute ghost logo drew me in. Regardless, I have stopped terminal emulator hopping for now, and have been enjoying Ghostty.

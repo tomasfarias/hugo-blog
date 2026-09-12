@@ -1,0 +1,62 @@
++++
+title = "Working remotely has never felt this lonely"
+author = ["Tomás Farías Santana"]
+authorLink = "https://tomasfarias.dev"
+date = 2026-09-12T16:00:00+02:00
+draft = false
+tags = ["ai", "remote-work"]
++++
+
+I have been working remotely since the 2020 COVID 19 pandemic[^fn:1]. Until this month, I was extremely happy with remote work: I get to enjoy cooking with my partner, I can work in comfy clothes I would not wear in public, and my commute is the few seconds it takes me to stumble from my bed to my desk. It may not be the case for other people but I am a reserved person who prefers to keep private and work lives separate, so this scheme fit me perfectly.
+
+I was never blind to the downsides though: the biggest one being that you can slowly forget that there are real humans on the other side of the chat screen. Losing that physical connection can make one feel lonely — even I am not immune to that. But, there are ways to combat this loneliness: I understood from the beginning that communication must change when working remote[^fn:2] and that meeting in person every once in a while was still important. All in all, with these measures in place, the benefits of remote work dominated.
+
+**Nowadays, though, working remotely has never felt this lonely.**
+
+_Am I working with humans or is it all LLMs?_
+
+Maybe you probably figured out where this was going based on the tags of this post: more and more of my daily interactions are with robots, and less and less with humans. Sometimes I even interact with LLMs while _thinking_ they are humans. As much as I like to think I am better than the average person at spotting LLM writing, it's entirely possible I may have missed the tells and inadvertedly chatted with a robot pretending to be a human.
+
+_Is it wrong that I feel repulsed thinking about that possibility?_
+
+## No, unsolicited LLM responses are a breach of trust
+
+I have an implicit expectation that messaging a coworker will result in one of the following: a response from said coworker, no response[^fn:3], or some pre-filled message (like "away from keyboard"). Instead, I have had several circumstances of an LLM pretending to be the human, as if this was a customer support chatbot some corporation installed to try to save some money. But in contrast to many customer support chatbots, there is no "talk to a human" command: _I have already asked for a human when I messaged a human!_
+
+Thankfully, I don't think I am alone in this: the Rust project recently adopted an LLM policy which explicitly [bans LLM comments posted from a personal account](https://forge.rust-lang.org/policies/llm-usage.html#-banned)[^fn:4]. Additionally, they shared a blog post which [discusses the breach of trust](https://blog.rust-lang.org/inside-rust/2026/08/05/rust-langrust-is-adopting-an-llm-policy/#mechanically-copy-pasting-llm-output-is-a-waste-of-time), specifically in the context of code reviews (**bolding** is mine):
+
+> Moreover, this \[responding to a review comment with an LLM's answer\] is a breach of trust between the reviewer and the author. Our assumption when we review is that we're talking to a real person who wants to do their best work. Pasting LLM text creates suspicion: does the author actually care? **Is there a person here at all?**
+
+So, my next step was to bring this up at $JOB and propose a work policy change, essentially borrowing this point from the Rust project. Disappointingly, the responses were more mixed than I was expecting: some people agreed, thankfully, but several more thought the policy was unnecessary, and others just disagreed strongly. What shocked me the most was that more than one person expressed they felt they were saving people's time by having an LLM respond to comments made to them, as comments frequently required trivial answers. I countered that in those cases no response is necessary _at all_: reacting with a "👍️" or a short _"Thanks!"_ would already be going over what's necessary and only if you are feeling particularly thankful for the work of the reviewer. If we care about efficiency, then nothing is more efficient than **literally doing nothing**. In contrast, it seemed people felt like _adding_ work for the reviewer actually saved time, seemingly dismissing the burden imposed on the reviewer of reading whatever the LLM spitted out, a burden the LLM _prompter_ doesn't share.
+
+_Maybe they think the reviewer is also an LLM?_
+
+**Oh…**
+
+## Yes, it's just robots talking to robots
+
+Out of curiosity, I frequently check up on what other teams at $JOB are doing: I'll dig through a channel and click on some recent links to see what code they are pushing to $FORGE. Lately, the first thing I see is an _unreadable_ wall of text, followed by review comments with more _unreadable_ text, and replies to those comments with more and more _unreadable_ text. All the _unreadable_ text seemingly authored by human profiles. What evidence do I present for the claim that the text is _unreadable_? Well, critically, the fact that **nobody read it**: My effort to get through some of this text was the only effort spent by any of the humans involved in this work (assuming any were actually involved). So, until I learn of somebody who has actually read any of these discussions to completion, I can claim they are _unreadable_.
+
+It is not hard to assume that if the text is _unreadable_, then some people will reach out for help, and that the help may take the form of having an LLM reply for you. So, we being a cycle in which LLMs are used to respond to LLMs, quickly flooding the message board and drowning any humans who get caught in the middle. This is the new way people (or should I say robots?) are working[^fn:5], and thus why my proposal found opposition.
+
+## I don't like this new way of working
+
+
+And so, I gave up on the policy change. I enjoy a good argument so I could have kept the thread going, but in day-to-day at $JOB I feel like the minority, and thus the policy would have likely not been enforced or quickly reverted.
+
+**I know for a fact I am not alone, but it feels more and more like that every day.**
+
+I also know leadership is not on my side. Naturally, leaders will claim that they are not pressuring anybody to adopt LLMs — "everybody can choose their own tools" will be thrown around. But when leaders themselves incorporate LLMs into their own workflows, strongly vouch for the efficiency gains, and highlight work done with LLMs, **that is pressure too**. I simply don't have the weight, nor the data, to throw around. I still like my $JOB, and the industry doesn't look like the land of opportunity it used to be, so I compromised instead with trying to enforce standards within my team and with people who think, more or less, like me.
+
+All of this makes me recall how in my junior days I would get frustrated when coworkers wrote poor commit messages (imagine `fix: Fixes`). But now? Commit messages like that look like graffiti on a wall saying "human wuz here". But, unlike graffiti in any city, you don't see them much anymore.
+
+## Footnotes
+[^fn:1]: I don't see us changing our ways, particularly around animal agriculture, so unfortunately I have to specify which pandemic I am talking about as I don't think it will be the last. Readers from the future: I hope you have proved me wrong.
+
+[^fn:2]: As a general rule: Erring on the side of over communicating has generally worked well for me.
+
+[^fn:3]: I take no offense from no response. People are busy, I get it. I can send a follow-up if it's important, or otherwise I will find my answer somewhere else.
+
+[^fn:4]: The policy does allow sharing LLM responses that are properly quoted as such, but requires the rest of the comment to stand on its own. Personally, I think this is a bit contradictory: if the comment can stand on its own, then isn't the LLM response unnecessary? But I figure the Rust project is reaching for some compromise here.
+
+[^fn:5]: I have some anecdotical evidence of this happening outside of the tech industry too: Friends have shared with me they have LLMs write work emails for them, and so it's reasonable to assume an LLM may be replying to that email in response.
